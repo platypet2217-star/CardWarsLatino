@@ -1,0 +1,14 @@
+[
+	{"Type":"Card normal","Quantity":"1","Rarity":"1","Name":"!!DAILY_GIFT_CARD","Icon":"Icon_CardNormal","RetryGemCost":"0"},
+	{"Type":"Gems","Quantity":"1","Rarity":"1","Name":"!!DAILY_GIFT_GEMS","Icon":"UI_Gem_Icon","RetryGemCost":"0"},
+	{"Type":"Gems","Quantity":"5","Rarity":"1","Name":"!!DAILY_GIFT_GEMS","Icon":"UI_Gem_Icon","RetryGemCost":"0"},
+	{"Type":"Card obsidian","Quantity":"1","Rarity":"1","Name":"!!DAILY_GIFT_CARD","Icon":"Icon_CardBlack","RetryGemCost":"0"},
+	{"Type":"Gems","Quantity":"10","Rarity":"1","Name":"!!DAILY_GIFT_GEMS","Icon":"UI_Gem_Icon","RetryGemCost":"0"},
+	{"Type":"Gems","Quantity":"50","Rarity":"1","Name":"!!DAILY_GIFT_GEMS","Icon":"UI_Gem_Icon","RetryGemCost":"0"},
+	{"Type":"Coins","Quantity":"10000","Rarity":"1","Name":"!!DAILY_GIFT_COINS","Icon":"UI_Coin_Icon","RetryGemCost":"0"},
+	{"Type":"Gems","Quantity":"69","Rarity":"1","Name":"!!DAILY_GIFT_GEMS","Icon":"UI_Gem_Icon","RetryGemCost":"0"},
+	{"Type":"Gems","Quantity":"100","Rarity":"1","Name":"!!DAILY_GIFT_GEMS","Icon":"UI_Gem_Icon","RetryGemCost":"0"},
+	{"Type":"Coins","Quantity":"100000","Rarity":"1","Name":"!!DAILY_GIFT_COINS","Icon":"UI_Coin_Icon","RetryGemCost":"0"},
+	{"Type":"Card gold","Quantity":"1","Rarity":"1","Name":"!!DAILY_GIFT_CARD","Icon":"Icon_CardGold","RetryGemCost":"0"},
+	{"Type":"Coins","Quantity":"1000000","Rarity":"1","Name":"!!DAILY_GIFT_COINS","Icon":"UI_Coin_Icon","RetryGemCost":"0"},
+]
