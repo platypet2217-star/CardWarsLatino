@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -97,143 +98,230 @@ public class GachaManager : ILoadable
 		}
 	}
 
-	public IEnumerator Load()
-	{
-		Dictionary<string, object>[] data = SQUtils.ReadJSONData("db_GachaWeights.json");
-		if (LoadingManager.ShouldYield())
-		{
-			yield return null;
-		}
-		weightDict = new Dictionary<string, Dictionary<string, int>>();
-		Dictionary<string, object>[] array = data;
-		foreach (Dictionary<string, object> dict in array)
-		{
-			string cardID = TFUtils.LoadNullableString(dict, "CardID");
-			if (string.IsNullOrEmpty(cardID) || weightDict.ContainsKey(cardID))
-			{
-				continue;
-			}
-			Dictionary<string, int> cardDict = new Dictionary<string, int>();
-			weightDict.Add(cardID, cardDict);
-			foreach (string key in dict.Keys)
-			{
-				if (!(key != "CardID") || !(key != "Quality"))
-				{
-					continue;
-				}
-				if (key == "Quality")
-				{
-					switch (TFUtils.LoadString(dict, key))
-					{
-					case "Gold":
-						cardDict.Add(key, 1);
-						break;
-					default:
-						cardDict.Add(key, 0);
-						break;
-					}
-				}
-				else
-				{
-					int value = TFUtils.LoadInt(dict, key, 0);
-					cardDict.Add(key, value);
-				}
-			}
-			if (LoadingManager.ShouldYield())
-			{
-				yield return null;
-			}
-		}
-		data = SQUtils.ReadJSONData("db_GachaSchedule.json");
-		if (LoadingManager.ShouldYield())
-		{
-			yield return null;
-		}
-		schemes = new List<GachaScheme>();
-		Dictionary<string, object>[] array2 = data;
-		foreach (Dictionary<string, object> dict2 in array2)
-		{
-			string stime = TFUtils.LoadNullableString(dict2, "StartDate");
-			string etime = TFUtils.LoadNullableString(dict2, "EndDate");
-			GachaScheme newScheme = new GachaScheme();
-			if (SQUtils.StringEqual(stime.ToLower(), "default"))
-			{
-				newScheme.start = DateTime.MinValue;
-				newScheme.end = DateTime.MaxValue;
-			}
-			else
-			{
-				try
-				{
-					newScheme.start = DateTime.Parse(stime);
-				}
-				catch (FormatException)
-				{
-					throw;
-				}
-				try
-				{
-					newScheme.end = DateTime.Parse(etime);
-				}
-				catch (FormatException)
-				{
-					throw;
-				}
-			}
-			newScheme.isPremium = SQUtils.StringEqual("premium", TFUtils.LoadString(dict2, "ChestType", string.Empty).ToLower());
-			newScheme.coins = TFUtils.LoadInt(dict2, "Coins", 0);
-			newScheme.gems = TFUtils.LoadInt(dict2, "Gems", 0);
-			newScheme.party = TFUtils.LoadString(dict2, "Party", string.Empty);
-			newScheme.columns = new List<string>();
-			for (int i = 1; i <= 10; i++)
-			{
-				string newCol = TFUtils.TryLoadString(dict2, "Weight" + i);
-				if (string.IsNullOrEmpty(newCol))
-				{
-					break;
-				}
-				newScheme.columns.Add(newCol);
-			}
-			schemes.Add(newScheme);
-			if (LoadingManager.ShouldYield())
-			{
-				yield return null;
-			}
-		}
-		schemes.Sort(delegate(GachaScheme a, GachaScheme b)
-		{
-			double totalSeconds = (a.end - a.start - (b.end - b.start)).TotalSeconds;
-			if (totalSeconds > 0.0)
-			{
-				return 1;
-			}
-			return (totalSeconds < 0.0) ? (-1) : 0;
-		});
-		data = SQUtils.ReadJSONData("db_Party.json");
-		if (LoadingManager.ShouldYield())
-		{
-			yield return null;
-		}
-		parties = new Dictionary<string, PartyInfo>();
-		Dictionary<string, object>[] array3 = data;
-		foreach (Dictionary<string, object> dict3 in array3)
-		{
-			PartyInfo partyInfo = new PartyInfo
-			{
-				id = (string)dict3["ID"],
-				gachaId = (string)dict3["SchemeName"],
-				title = (string)dict3["Title"],
-				description = (string)dict3["Description"]
-			};
-			parties.Add(partyInfo.id, partyInfo);
-			if (LoadingManager.ShouldYield())
-			{
-				yield return null;
-			}
-		}
-	}
+    public IEnumerator Load()
+    {
+        Dictionary<string, object>[] data = SQUtils.ReadJSONData("db_GachaWeights.json");
+        if (LoadingManager.ShouldYield())
+        {
+            yield return null;
+        }
+        weightDict = new Dictionary<string, Dictionary<string, int>>();
+        Dictionary<string, object>[] array = data;
+        foreach (Dictionary<string, object> dict in array)
+        {
+            string cardID = TFUtils.LoadNullableString(dict, "CardID");
+            if (string.IsNullOrEmpty(cardID) || weightDict.ContainsKey(cardID))
+            {
+                continue;
+            }
+            Dictionary<string, int> cardDict = new Dictionary<string, int>();
+            weightDict.Add(cardID, cardDict);
+            foreach (string key in dict.Keys)
+            {
+                if (!(key != "CardID") || !(key != "Quality"))
+                {
+                    continue;
+                }
+                if (key == "Quality")
+                {
+                    switch (TFUtils.LoadString(dict, key))
+                    {
+                        case "Gold":
+                            cardDict.Add(key, 1);
+                            break;
+                        default:
+                            cardDict.Add(key, 0);
+                            break;
+                    }
+                }
+                else
+                {
+                    int value = TFUtils.LoadInt(dict, key, 0);
+                    cardDict.Add(key, value);
+                }
+            }
+            if (LoadingManager.ShouldYield())
+            {
+                yield return null;
+            }
+        }
+        data = SQUtils.ReadJSONData("db_GachaSchedule.json");
+        if (LoadingManager.ShouldYield())
+        {
+            yield return null;
+        }
+        schemes = new List<GachaScheme>();
+        Dictionary<string, object>[] array2 = data;
+        foreach (Dictionary<string, object> dict2 in array2)
+        {
+            string stime = TFUtils.LoadNullableString(dict2, "StartDate");
+            string etime = TFUtils.LoadNullableString(dict2, "EndDate");
+            GachaScheme newScheme = new GachaScheme();
+            if (SQUtils.StringEqual(stime.ToLower(), "default"))
+            {
+                newScheme.start = DateTime.MinValue;
+                newScheme.end = DateTime.MaxValue;
+            }
+            else
+            {
+                // =============================================================
+                // INTERCEPCIÓN DINÁMICA DE FECHAS PARA EL GACHA
+                // =============================================================
+                string sTimeCorregido = AjustarAnioGachaString(stime, 0);
+                string eTimeCorregido = AjustarAnioGachaString(etime, 0);
 
-	public void Destroy()
+                try
+                {
+                    // Si al forzar el año actual, el fin resulta menor que el inicio (ej. cambia de año en Año Nuevo)
+                    // recalculamos la fecha de fin sumándole un año de margen.
+                    if (DateTime.Parse(eTimeCorregido) < DateTime.Parse(sTimeCorregido))
+                    {
+                        eTimeCorregido = AjustarAnioGachaString(etime, 1);
+                    }
+                }
+                catch { }
+
+                // Asignamos las cadenas corregidas a las variables de lectura originales
+                stime = sTimeCorregido;
+                etime = eTimeCorregido;
+                // =============================================================
+
+                try
+                {
+                    newScheme.start = DateTime.Parse(stime);
+                }
+                catch (FormatException)
+                {
+                    throw;
+                }
+                try
+                {
+                    newScheme.end = DateTime.Parse(etime);
+                }
+                catch (FormatException)
+                {
+                    throw;
+                }
+            }
+            newScheme.isPremium = SQUtils.StringEqual("premium", TFUtils.LoadString(dict2, "ChestType", string.Empty).ToLower());
+            newScheme.coins = TFUtils.LoadInt(dict2, "Coins", 0);
+            newScheme.gems = TFUtils.LoadInt(dict2, "Gems", 0);
+            newScheme.party = TFUtils.LoadString(dict2, "Party", string.Empty);
+            newScheme.columns = new List<string>();
+            for (int i = 1; i <= 10; i++)
+            {
+                string newCol = TFUtils.TryLoadString(dict2, "Weight" + i);
+                if (string.IsNullOrEmpty(newCol))
+                {
+                    break;
+                }
+                newScheme.columns.Add(newCol);
+            }
+            schemes.Add(newScheme);
+            if (LoadingManager.ShouldYield())
+            {
+                yield return null;
+            }
+        }
+        schemes.Sort(delegate (GachaScheme a, GachaScheme b)
+        {
+            double totalSeconds = (a.end - a.start - (b.end - b.start)).TotalSeconds;
+            if (totalSeconds > 0.0)
+            {
+                return 1;
+            }
+            return (totalSeconds < 0.0) ? (-1) : 0;
+        });
+        data = SQUtils.ReadJSONData("db_Party.json");
+        if (LoadingManager.ShouldYield())
+        {
+            yield return null;
+        }
+        parties = new Dictionary<string, PartyInfo>();
+        Dictionary<string, object>[] array3 = data;
+        foreach (Dictionary<string, object> dict3 in array3)
+        {
+            PartyInfo partyInfo = new PartyInfo
+            {
+                id = (string)dict3["ID"],
+                gachaId = (string)dict3["SchemeName"],
+                title = (string)dict3["Title"],
+                description = (string)dict3["Description"]
+            };
+            parties.Add(partyInfo.id, partyInfo);
+            if (LoadingManager.ShouldYield())
+            {
+                yield return null;
+            }
+        }
+    }
+
+    // =========================================================================
+    // SOLUCIÓN DEFINITIVA: ROTACIÓN INFINITA MEDIANTE CICLO DE AÑOS (MÓDULO)
+    // =========================================================================
+    private string AjustarAnioGachaString(string dateStr, int offsetAnio)
+    {
+        if (string.IsNullOrEmpty(dateStr)) return dateStr;
+
+        try
+        {
+            int primerGuion = dateStr.IndexOf('-');
+            if (primerGuion != -1)
+            {
+                string anioOriginalStr = dateStr.Substring(0, primerGuion);
+                int anioOriginal = int.Parse(anioOriginalStr);
+
+                // 1. Definimos la duración total de tu rotación en el JSON.
+                // Tus ejemplos van de 2021 a 2022, lo que equivale a un ciclo de 2 años.
+                int tamanoCicloAnios = 2;
+                int anioBaseJson = 2021;
+
+                // 2. Corregimos el error tipográfico nativo del JSON (Diciembre 2022 -> Enero 2022)
+                // Si el mes de inicio es diciembre y el de fin es enero, forzamos que el fin sea del año siguiente.
+                if (offsetAnio == 1 && anioOriginal == anioBaseJson)
+                {
+                    // Caso normal de año nuevo dentro del ciclo
+                }
+                else if (dateStr.Contains("-01-29") && anioOriginal == 2022)
+                {
+                    // Parche específico para la línea corrupta del juego original:
+                    // Tratamos el año de expiración como 2023 internamente para que la matemática no se rompa.
+                    anioOriginal = 2023;
+                }
+
+                // 3. Calculamos la posición relativa de este cofre dentro de la rotación (0 o 1)
+                int posicionEnCiclo = (anioOriginal - anioBaseJson) % tamanoCicloAnios;
+                if (posicionEnCiclo < 0) posicionEnCiclo += tamanoCicloAnios;
+
+                // 4. Calculamos en qué año del ciclo se encuentra el jugador hoy en día
+                int anioActualPlataforma = DateTime.Now.Year;
+                int cicloActual = (anioActualPlataforma - anioBaseJson) / tamanoCicloAnios;
+
+                // 5. Proyectamos el año combinando el ciclo actual con la posición del cofre
+                int anioFinal = anioBaseJson + (cicloActual * tamanoCicloAnios) + posicionEnCiclo + offsetAnio;
+
+                // Si por desfases de calendario el evento calculado ya pasó este año, 
+                // lo empujamos al siguiente ciclo para que siga disponible en el futuro inmediato
+                if (anioFinal < anioActualPlataforma && offsetAnio == 0)
+                {
+                    anioFinal += tamanoCicloAnios;
+                }
+
+                string restoDeFecha = dateStr.Substring(primerGuion);
+                return anioFinal.ToString() + restoDeFecha;
+            }
+        }
+        catch (Exception ex)
+        {
+            UnityEngine.Debug.LogWarning("Error en el ciclo infinito de Gacha: " + ex.Message);
+        }
+
+        return dateStr;
+    }
+
+
+
+    public void Destroy()
 	{
 		instance = null;
 	}
