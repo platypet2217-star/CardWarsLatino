@@ -6,7 +6,7 @@ Esta versión tiene como objetivo principal traer las voces en español latino d
 ## Descarga
 Aún no sale un release para esta versión, por mientras pueden descargar la última versión del port de pc con cambios que corrigen detalles dentro del juego, por supuesto, hechas por su servidor.
 
-* [Última Version de Windows](https://github.com/platypet2217-star/CardWars/releases/download/1.12.9-2/CardWars-1.12.9-2.zip)
+* [Última Version de Windows](https://github.com/platypet2217-star/CardWars/releases/download/1.12.9-3/CardWars-1.12.9-3.zip)
 * Para Linux - Funciona bien con versión de proton probado recientemente con compatibilidad con Cachyos
 
 Agradecimientos a toda la comunidad que ha hecho posible esto, desde los creadores del juego hasta las personas independientes que reportan errores dentro del juego, son increibles chicos.
