@@ -4,9 +4,7 @@
 Esta versión tiene como objetivo principal traer las voces en español latino de la serie de hora de aventura para este juego, además de corregir los inconvenientes del juego, además de dar mantenimiento junto con algún agregado de ser el caso, además va a traer de vuelta algunas estadísticas y probabilidades de versiones anteriores del guerra de cartas clásico para una experiencia nostálgica.
 
 ## Descarga
-Aún no sale un release para esta versión, por mientras pueden descargar la última versión del port de pc con cambios que corrigen detalles dentro del juego, por supuesto, hechas por su servidor.
-
-* [Última Version de Windows](https://github.com/platypet2217-star/CardWars/releases/download/1.12.9-3/CardWars-1.12.9-3.zip)
+* [Última Version de Windows](https://github.com/platypet2217-star/CardWarsLatino/releases/download/0.0.1/CardWarsLatino-0.0.1.zip)
 * Para Linux - Funciona bien con versión de proton probado recientemente con compatibilidad con Cachyos
 
 Agradecimientos a toda la comunidad que ha hecho posible esto, desde los creadores del juego hasta las personas independientes que reportan errores dentro del juego, son increibles chicos.
